@@ -1,8 +1,9 @@
-import { useState } from 'react';
+'use client'; import { useState } from 'react';
+import MultiImageUploader from './MultiImageUploader';
 
 const RoomUploadForm = ({ nextStep, prevStep, handleImageUpload }) => {
   const [selectedTab, setSelectedTab] = useState('lounge');
-  const [selectedFiles, setSelectedFiles] = useState({
+  const [roomImages, setRoomImages] = useState({
     lounge: [],
     kitchen: [],
     bedroom: [],
@@ -14,10 +15,9 @@ const RoomUploadForm = ({ nextStep, prevStep, handleImageUpload }) => {
     setSelectedTab(tab);
   };
 
-  const handleFilesChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles({
-      ...selectedFiles,
+  const handleFilesChange = (files) => {
+    setRoomImages({
+      ...roomImages,
       [selectedTab]: files
     });
     handleImageUpload(selectedTab, files);
@@ -38,9 +38,8 @@ const RoomUploadForm = ({ nextStep, prevStep, handleImageUpload }) => {
         ))}
       </div>
       <div className="p-4 bg-white rounded-b shadow-md">
-        <label className="block mb-1 capitalize">{selectedTab}:</label>
-        <input type="file" multiple onChange={handleFilesChange} className="w-full p-2 border rounded mb-4" />
-        <div className="flex justify-between">
+        <MultiImageUploader handleImageUpload={handleFilesChange} />
+        <div className="flex justify-between mt-4">
           <button type="button" onClick={prevStep} className="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition-colors">Previous</button>
           <button type="button" onClick={nextStep} className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors">Next</button>
         </div>
